@@ -1,4 +1,7 @@
 <template>
+  <Loading v-if="loading"/>
+
+  <div v-else>
   <div class="columns is-centered">
     <div class="column is-half mb-5 has-text-centered">
         <div class="columns is-flex is-centered">
@@ -8,7 +11,7 @@
         </div> 
         <h2>Hi {{ user.nickname }}</h2>
 
-      <div v-show="prev_site != ''" class="is-flex">
+      <div v-if="prev_site != ''" class="is-flex">
         <input class="input is-small" v-model="new_site" placeholder="https://your.site"/>
         <button class="button is-info is-light is-small" @click="updateSite">Update Site</button>  
       </div>
@@ -86,13 +89,17 @@
 
   </div>
   </div>
+  </div>
 </template>
 
 <script>
+import Loading from '../components/Loading.vue'
+
 export default{
   data() {
     return {
-      base_API: 'https://imagin-api.deta.dev', //http://localhost:3000
+      loading: true,
+      base_API: 'https://imagin-api.deta.dev', 
       new_site: '',
       prev_site: '',
       site_key: null,
@@ -106,6 +113,9 @@ export default{
       api_link: '',
       iframe_src: ''
     }
+  },
+  components: {
+    Loading
   },
   mounted() {
     this.previewImage() //init for first user
@@ -189,6 +199,8 @@ export default{
               //Re-init image
               _this.previewImage()
             }
+
+            _this.loading = false
         });
     },
 
