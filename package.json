@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@auth0/auth0-spa-js": "^1.17.0",
+    "sass": "^1.38.0",
     "vue": "^3.0.5",
     "vue-router": "^4.0.11"
   },
