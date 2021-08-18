@@ -6,7 +6,7 @@
 
     <div class="has-text-centered">
       <router-link to="/profile">
-        <button class="button mt-6 is-info is-rounded is-large is-size-6-mobile">Try Now</button>
+        <button class="button mt-6 is-info is-rounded is-large is-size-6-mobile">Imagin Now</button>
       </router-link>
     </div>  
   </div>
