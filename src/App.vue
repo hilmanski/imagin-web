@@ -9,11 +9,11 @@
     </div>
 
     <div id="navbar" class="is-flex is-align-items-center">
+      <div v-if="!$auth.loading.value">
       <router-link to="/">Home</router-link>
-      <router-link to="/profile">Profile</router-link>
-      <div v-if="!$auth.loading.value" class="is-inline-block">
-        <button class="button is-rounded is-small" v-if="!$auth.isAuthenticated.value" @click="login">Log in</button>
-        <button class="button is-rounded is-small" v-if="$auth.isAuthenticated.value" @click="logout">Log out</button>
+      <router-link to="/profile" v-if="$auth.isAuthenticated.value">Profile</router-link>
+      <button class="button is-rounded is-small" v-if="!$auth.isAuthenticated.value" @click="login">Log in</button>
+      <button class="button is-rounded is-small" v-if="$auth.isAuthenticated.value" @click="logout">Log out</button>
       </div>
     </div>
   </header>
