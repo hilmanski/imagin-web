@@ -1,0 +1,255 @@
+<template>
+  <div class="columns is-centered">
+    <div class="column is-half mb-5 has-text-centered">
+        <div class="columns is-flex is-centered">
+          <figure class="image is-64x64">
+            <img class="is-rounded" :src="user.picture">
+          </figure>
+        </div> 
+        <h2>Hi {{ user.nickname }}</h2>
+
+      <div v-show="prev_site != ''" class="is-flex">
+        <input class="input is-small" v-model="new_site" placeholder="https://your.site"/>
+        <button class="button is-info is-light is-small" @click="updateSite">Update Site</button>  
+      </div>
+    </div>
+  </div>
+  
+  <div v-if="prev_site == ''">
+    <p>First, add your site</p>
+    <input class="input is-fullwidth" v-model="new_site" placeholder="https://your.site" />
+    <button class="button is-fullwidth is-primary mt-2" @click="addSite">Add Site</button>  
+  </div>
+
+  <div v-else>
+    <div class="columns">
+      <div class="column">  
+        <p class='has-text-weight-semibold'>Image preview</p>
+        <iframe :src="iframe_src" title="Image template preview"
+            width="500" height="300" class='mb-2'>
+        </iframe>
+        
+        <div class='is-flex is-align-items-center is-justify-content-space-between'>
+          <p class='has-text-weight-semibold'>Image Code</p> <button class='button is-small' @click='copycode'>Copy Code</button>
+        </div>
+
+        <p class="codelink mt-1 mb-1"> {{ api_link }}</p>
+        <p> <small> You can use above link to generate dynamic social image in  your meta tags. Just change 'title' value dynamically  </small></p>
+      </div>
+ 
+     <div class="column">  </div>
+  
+     <div class="column is-5">
+      <p class='has-text-weight-semibold mb-2'>Customize your template: </p>
+
+      <div class='control columns is-align-items-center mb-2'>
+        <label class="column is-4">Text Color: </label> 
+        <input v-model="text_color" type="color" class="input is-small" />
+      </div>
+      
+      <div class='control columns is-align-items-center mb-2'>
+        <label class="column is-4"> Background Color: </label> 
+        <input v-model="bg_color" type="color" class="input is-small" />
+      </div>
+
+      <div class='control columns is-align-items-center mb-2'>
+        <label class="column is-4"> Logo URL: </label> 
+        <input v-model="logo_src" type="text" class="input is-small" placeholder="url link"/>
+      </div>
+
+      <div class='control columns is-align-items-center mb-2'>
+        <label class="column is-4"> Background URL: </label> 
+        <input v-model="background_src" type="text" class="input is-small" placeholder="url link"/>
+      </div>
+
+      <div class='control columns is-align-items-center mb-2'>
+        <label class="column is-4"> Font Family </label> 
+        <select v-model="fontfamily" class="select is-fullwidth is-small">
+          <option value="sans-serif">Sans Serif</option>
+          <option value="serif">Serif</option>
+          <option value="monospace">Monospace</option>
+          <option value="cursive">Cursive</option>
+        </select>
+      </div>
+      
+      <div class=' columns is-align-items-center mb-2'>
+        <label class="column is-4"> Text Align: </label> 
+        <select v-model="align" class="select is-fullwidth is-small">
+          <option value="left">left</option>
+          <option value="center">center</option>
+          <option value="right">right</option>
+        </select>
+      </div>
+
+      <button class="button is-info is-small is-fullwidth" @click="saveSetting">Save and Preview</button>
+  </div>
+
+  </div>
+  </div>
+</template>
+
+<script>
+export default{
+  data() {
+    return {
+      base_API: 'https://imagin-api.deta.dev', //http://localhost:3000
+      new_site: '',
+      prev_site: '',
+      site_key: null,
+      user: this.$auth.user,
+      text_color: '#333333',
+      bg_color: '#ffffff',
+      logo_src: '',
+      background_src: '',
+      align: 'left',
+      fontfamily: 'sans-serif',
+      api_link: '',
+      iframe_src: ''
+    }
+  },
+  mounted() {
+    this.previewImage() //init for first user
+    this.checkUserSite()
+  },
+  methods: {
+    async getHeaders() {
+      const token = await this.$auth.getTokenSilently();
+      return {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+      }
+    },
+
+    validateWebsite(sitename) {
+        const siteRegex = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi;
+        if(!sitename.match(new RegExp(siteRegex))) {
+          alert('must be a website with http(s)://')
+          return false
+        }
+        return true
+    },
+
+    async addSite() {
+      const _this = this
+      const sitename = this.new_site.trim()
+
+      if(!this.validateWebsite(sitename)) return
+
+      fetch(`${this.base_API}/sites`, {
+        method: 'POST', 
+        headers: await this.getHeaders(),
+        body: JSON.stringify({ sitename }),
+      })
+      .then(response => response.json())
+      .then(data => {
+          _this.prev_site = data.sitename
+          _this.site_key = data.key
+      })
+    },
+
+     async updateSite() {
+      const _this = this
+      const sitename = this.new_site.trim()
+
+      if(!this.validateWebsite(sitename)) return
+
+      fetch(`${this.base_API}/sites/${this.site_key}`, {
+        method: 'PUT', 
+        headers: await this.getHeaders(),
+        body: JSON.stringify({ sitename }),
+      })
+      .then(response => response.json())
+      .then(data => {
+          _this.prev_site = data.sitename
+          _this.previewImage()
+      })
+    },
+
+    async checkUserSite() {       
+       const _this = this
+       fetch(`${this.base_API}/sites`, { headers: await this.getHeaders() })
+        .then(response => response.json())
+        .then(function(data){ 
+            const sites = data.items
+            if(sites.length > 0) {
+              const site = sites[0]
+              _this.prev_site = site.sitename
+              _this.new_site = _this.prev_site
+              _this.site_key = site.key
+
+              if(site.theme) {
+                _this.text_color = site.theme.text_color
+                _this.bg_color = site.theme.bg_color
+                _this.align = site.theme.align
+                _this.fontfamily = site.theme.fontfamily
+                _this.logo_src = site.theme.logo_src
+                _this.background_src = site.theme.background_src
+              }
+
+              //Re-init image
+              _this.previewImage()
+            }
+        });
+    },
+
+    get_api_link() {
+      let clean_url = this.new_site.replace('https://', '')
+      
+      if (clean_url.substring(clean_url.length-1) == "/")
+        clean_url = clean_url.replace('/', '')
+
+      let text_color = this.text_color.replace('#', '')
+      let bg_color = this.bg_color.replace('#', '')
+
+      let fontfamily = this.fontfamily
+      let align = this.align
+      
+      let logo = ''
+      if(this.logo_src != '')
+        logo = `&logo=${this.logo_src}`
+
+      let backgroundImg = ''
+      if(this.background_src != '')
+        backgroundImg = `&bgimage=${this.background_src}`
+    
+      this.api_link = `https://get.imagin.live/api?web=${clean_url}&color=${text_color}&bgcolor=${bg_color}&fontfamily=${fontfamily}&align=${align}${logo}${backgroundImg}&title=Imagine.. this is your amazing title`
+    },
+
+
+    async saveSetting() {
+      const _this = this
+      const data = {
+        theme: {
+          'text_color': this.text_color,
+          'bg_color': this.bg_color,
+          'logo_src': this.logo_src,
+          'background_src': this.background_src,
+          'fontfamily': this.fontfamily,
+          'align': this.align
+        }
+      }
+
+      fetch(`${this.base_API}/sites/theme/${this.site_key}`, {
+        method: 'PUT', 
+        headers: await this.getHeaders(),
+        body: JSON.stringify(data),
+      })
+      .then(response => response.json())
+      .then(data => {
+          console.log(data)
+          _this.previewImage()
+      })
+    },
+
+    previewImage() {
+        this.get_api_link()
+        this.iframe_src = this.api_link.replace('get.imagin.live/api', 'template.imagin.live')
+    },
+
+    copycode() {
+      navigator.clipboard.writeText(this.api_link)
+    }
+  }
+} 
+</script>
+
