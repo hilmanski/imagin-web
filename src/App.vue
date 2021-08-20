@@ -8,13 +8,11 @@
       </svg>
     </div>
 
-    <div id="navbar" class="is-flex is-align-items-center">
-      <div v-if="!$auth.loading.value">
+    <div v-if="!$auth.loading.value" id="navbar" class="is-flex is-align-items-center">
       <router-link to="/">Home</router-link>
       <router-link to="/profile" v-if="$auth.isAuthenticated.value">Profile</router-link>
       <button class="button is-rounded is-small" v-if="!$auth.isAuthenticated.value" @click="login">Log in</button>
       <button class="button is-rounded is-small" v-if="$auth.isAuthenticated.value" @click="logout">Log out</button>
-      </div>
     </div>
   </header>
 
