@@ -171,7 +171,7 @@ export default{
       })
       .then(response => response.json())
       .then(data => {
-          _this.prev_site = data.sitename
+          _this.prev_site = sitename
           _this.previewImage()
       })
     },
@@ -249,7 +249,6 @@ export default{
       })
       .then(response => response.json())
       .then(data => {
-          console.log(data)
           _this.previewImage()
       })
     },
