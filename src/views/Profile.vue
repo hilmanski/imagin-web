@@ -2,19 +2,20 @@
   <Loading v-if="loading"/>
 
   <div v-else>
-  <div class="columns is-centered">
-    <div class="column is-half mb-5 has-text-centered">
-        <div class="columns is-flex is-centered">
-          <figure class="image is-64x64">
+  <div class="columns">
+    <div class="column is-half mb-5">
+        <div class="columns is-flex">
+          <figure class="image is-64x64 mr-2">
             <img class="is-rounded" :src="user.picture">
           </figure>
+          <div>
+            <h2>Hi {{ user.nickname }}</h2>
+            <div v-if="prev_site != ''" class="is-flex">
+              <input class="input is-small" v-model="new_site" placeholder="https://your.site"/>
+              <button class="button is-info is-light is-small" @click="updateSite">Update Site</button>  
+            </div>
+          </div>
         </div> 
-        <h2>Hi {{ user.nickname }}</h2>
-
-      <div v-if="prev_site != ''" class="is-flex">
-        <input class="input is-small" v-model="new_site" placeholder="https://your.site"/>
-        <button class="button is-info is-light is-small" @click="updateSite">Update Site</button>  
-      </div>
     </div>
   </div>
   
@@ -37,7 +38,7 @@
         </div>
 
         <p class="codelink mt-1 mb-1"> {{ api_link }}</p>
-        <p> <small> You can use above link to generate dynamic social image in  your meta tags. Just change 'title' value dynamically  </small></p>
+        <p> <small> You can use above link to generate dynamic social image in  your meta tags. Just change 'title' value dynamically based on your programmign language</small></p>
       </div>
  
      <div class="column">  </div>
@@ -99,7 +100,7 @@ export default{
   data() {
     return {
       loading: true,
-      base_API: 'https://imagin-api.deta.dev', 
+      base_API: 'https://imagin-api.deta.dev', //'http://localhost:5000'
       new_site: '',
       prev_site: '',
       site_key: null,
@@ -192,8 +193,8 @@ export default{
                 _this.bg_color = site.theme.bg_color
                 _this.align = site.theme.align
                 _this.fontfamily = site.theme.fontfamily
-                _this.logo_src = site.theme.logo_src
-                _this.background_src = site.theme.background_src
+                _this.logo_src = (site.theme.logo_src) ? site.theme.logo_src : ''
+                _this.background_src = (site.theme.background_src) ? site.theme.background_src : ''
               }
 
               //Re-init image
