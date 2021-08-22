@@ -46,28 +46,28 @@
      <div class="column is-5">
       <p class='has-text-weight-semibold mb-2'>Customize your template: </p>
 
-      <div class='control columns is-align-items-center mb-2'>
-        <label class="column is-4">Text Color: </label> 
+      <div class='control is-flex is-align-items-center mb-2'>
+        <label class="column pl-0 is-4">Text Color: </label> 
         <input v-model="text_color" type="color" class="input is-small" />
       </div>
       
-      <div class='control columns is-align-items-center mb-2'>
-        <label class="column is-4"> Background Color: </label> 
+      <div class='control is-flex is-align-items-center mb-2'>
+        <label class="column pl-0 is-4"> Background Color: </label> 
         <input v-model="bg_color" type="color" class="input is-small" />
       </div>
 
-      <div class='control columns is-align-items-center mb-2'>
-        <label class="column is-4"> Logo URL: </label> 
+      <div class='control is-flex is-align-items-center mb-2'>
+        <label class="column pl-0 is-4"> Logo URL: </label> 
         <input v-model="logo_src" type="text" class="input is-small" placeholder="url link"/>
       </div>
 
-      <div class='control columns is-align-items-center mb-2'>
-        <label class="column is-4"> Background URL: </label> 
+      <div class='control is-flex is-align-items-center mb-2'>
+        <label class="column pl-0 is-4"> Background URL: </label> 
         <input v-model="background_src" type="text" class="input is-small" placeholder="url link"/>
       </div>
 
-      <div class='control columns is-align-items-center mb-2'>
-        <label class="column is-4"> Font Family </label> 
+      <div class='control is-flex is-align-items-center mb-2'>
+        <label class="column pl-0 is-4"> Font Family </label> 
         <select v-model="fontfamily" class="select is-fullwidth is-small">
           <option value="sans-serif">Sans Serif</option>
           <option value="serif">Serif</option>
@@ -76,8 +76,8 @@
         </select>
       </div>
       
-      <div class=' columns is-align-items-center mb-2'>
-        <label class="column is-4"> Text Align: </label> 
+      <div class=' is-flex is-align-items-center mb-2'>
+        <label class="column pl-0 is-4"> Text Align: </label> 
         <select v-model="align" class="select is-fullwidth is-small">
           <option value="left">left</option>
           <option value="center">center</option>
