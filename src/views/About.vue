@@ -37,6 +37,11 @@
 
       <p><b>How to get rid of "imagin.link" text on template?</b></p>
       <p>Ask me at <a href='twitter.com/hilmanski' target="_blank">twitter @hilmanski</a>.</p>
+      <br>
+
+      <p><b>Tips for developer</b></p>
+      <p>Take a look at the code we generated for you. You can play with the color, background, font, image, etc.. without using our app.</p>
+      <br>
     </section>
 </template>
 
