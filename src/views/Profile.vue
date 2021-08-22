@@ -48,27 +48,27 @@
 
       <div class='control is-flex is-align-items-center mb-2'>
         <label class="column pl-0 is-4">Text Color: </label> 
-        <input v-model="text_color" type="color" class="input is-small" />
+        <input v-model="theme.text_color" type="color" class="input is-small" />
       </div>
       
       <div class='control is-flex is-align-items-center mb-2'>
         <label class="column pl-0 is-4"> Background Color: </label> 
-        <input v-model="bg_color" type="color" class="input is-small" />
+        <input v-model="theme.bg_color" type="color" class="input is-small" />
       </div>
 
       <div class='control is-flex is-align-items-center mb-2'>
         <label class="column pl-0 is-4"> Logo URL: </label> 
-        <input v-model="logo_src" type="text" class="input is-small" placeholder="url link"/>
+        <input v-model="theme.logo_src" type="text" class="input is-small" placeholder="url link"/>
       </div>
 
       <div class='control is-flex is-align-items-center mb-2'>
         <label class="column pl-0 is-4"> Background URL: </label> 
-        <input v-model="background_src" type="text" class="input is-small" placeholder="url link"/>
+        <input v-model="theme.background_src" type="text" class="input is-small" placeholder="url link"/>
       </div>
 
       <div class='control is-flex is-align-items-center mb-2'>
         <label class="column pl-0 is-4"> Font Family </label> 
-        <select v-model="fontfamily" class="select is-fullwidth is-small">
+        <select v-model="theme.fontfamily" class="select is-fullwidth is-small">
           <option value="sans-serif">Sans Serif</option>
           <option value="serif">Serif</option>
           <option value="monospace">Monospace</option>
@@ -78,7 +78,7 @@
       
       <div class=' is-flex is-align-items-center mb-2'>
         <label class="column pl-0 is-4"> Text Align: </label> 
-        <select v-model="align" class="select is-fullwidth is-small">
+        <select v-model="theme.align" class="select is-fullwidth is-small">
           <option value="left">left</option>
           <option value="center">center</option>
           <option value="right">right</option>
@@ -100,19 +100,21 @@ export default{
   data() {
     return {
       loading: true,
+      user: this.$auth.user,
       base_API: 'https://imagin-api.deta.dev', //'http://localhost:5000'
       new_site: '',
       prev_site: '',
       site_key: null,
-      user: this.$auth.user,
-      text_color: '#333333',
-      bg_color: '#ffffff',
-      logo_src: '',
-      background_src: '',
-      align: 'left',
-      fontfamily: 'sans-serif',
       api_link: '',
-      iframe_src: ''
+      iframe_src: '',
+      theme: {
+        text_color: '#333333',
+        bg_color: '#ffffff',
+        logo_src: '',
+        background_src: '',
+        align: 'left',
+        fontfamily: 'sans-serif',
+      },
     }
   },
   components: {
@@ -189,12 +191,12 @@ export default{
               _this.site_key = site.key
 
               if(site.theme) {
-                _this.text_color = site.theme.text_color
-                _this.bg_color = site.theme.bg_color
-                _this.align = site.theme.align
-                _this.fontfamily = site.theme.fontfamily
-                _this.logo_src = (site.theme.logo_src) ? site.theme.logo_src : ''
-                _this.background_src = (site.theme.background_src) ? site.theme.background_src : ''
+                _this.theme.text_color = site.theme.text_color
+                _this.theme.bg_color = site.theme.bg_color
+                _this.theme.align = site.theme.align
+                _this.theme.fontfamily = site.theme.fontfamily
+                _this.theme.logo_src = (site.theme.logo_src) ? site.theme.logo_src : ''
+                _this.theme.background_src = (site.theme.background_src) ? site.theme.background_src : ''
               }
 
               //Re-init image
@@ -211,19 +213,19 @@ export default{
       if (clean_url.substring(clean_url.length-1) == "/")
         clean_url = clean_url.replace('/', '')
 
-      let text_color = this.text_color.replace('#', '')
-      let bg_color = this.bg_color.replace('#', '')
+      let text_color = this.theme.text_color.replace('#', '')
+      let bg_color = this.theme.bg_color.replace('#', '')
 
-      let fontfamily = this.fontfamily
-      let align = this.align
+      let fontfamily = this.theme.fontfamily
+      let align = this.theme.align
       
       let logo = ''
-      if(this.logo_src != '')
-        logo = `&logo=${this.logo_src}`
+      if(this.theme.logo_src != '')
+        logo = `&logo=${this.theme.logo_src}`
 
       let backgroundImg = ''
-      if(this.background_src != '')
-        backgroundImg = `&bgimage=${this.background_src}`
+      if(this.theme.background_src != '')
+        backgroundImg = `&bgimage=${this.theme.background_src}`
     
       this.api_link = `https://get.imagin.live/api?web=${clean_url}&color=${text_color}&bgcolor=${bg_color}&fontfamily=${fontfamily}&align=${align}${logo}${backgroundImg}&title=Imagine.. this is your amazing title`
     },
@@ -233,12 +235,12 @@ export default{
       const _this = this
       const data = {
         theme: {
-          'text_color': this.text_color,
-          'bg_color': this.bg_color,
-          'logo_src': this.logo_src,
-          'background_src': this.background_src,
-          'fontfamily': this.fontfamily,
-          'align': this.align
+          'text_color': this.theme.text_color,
+          'bg_color': this.theme.bg_color,
+          'logo_src': this.theme.logo_src,
+          'background_src': this.theme.background_src,
+          'fontfamily': this.theme.fontfamily,
+          'align': this.theme.align
         }
       }
 
