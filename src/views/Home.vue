@@ -22,6 +22,7 @@ export default {
     }
   },
   mounted() {
+    //change text dynamically
     let counter = 0
     let objectTextArr = ["Social", "Open Graph's", "Twitter Card's"]
     const _this = this
@@ -34,11 +35,9 @@ export default {
     }, 1000)
   },
   methods: {
-    // Log the user in
     login() {
       this.$auth.loginWithRedirect();
     },
-    // Log the user out
     logout() {
       this.$auth.logout({
         returnTo: window.location.origin

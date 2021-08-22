@@ -1,6 +1,6 @@
 {
     "domain": "dev-29gh-5yt.us.auth0.com",
     "client_id": "BiRlU297N8BfUCEDZsMgCrhX3nH73VRF",
-    "redirect_uri": "http://localhost:3000",
+    "redirect_uri": "https://imagin.live",
     "audience": "https://imagin.live"
 }

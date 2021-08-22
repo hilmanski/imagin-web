@@ -37,8 +37,8 @@
           <p class='has-text-weight-semibold'>Image Code</p> <button class='button is-small' @click='copycode'>Copy Code</button>
         </div>
 
-        <p class="codelink mt-1 mb-1"> {{ api_link }}</p>
-        <p> <small> You can use above link to generate dynamic social image in  your meta tags. Just change 'title' value dynamically based on your programmign language</small></p>
+        <p class="codelink mt-1 mb-2"> {{ api_link }}</p>
+        <p class='line-height: 1.2rem'> <small> You can use above link to generate dynamic social image in  your meta tags. Just change 'title' value dynamically based on your programming language</small></p>
       </div>
  
      <div class="column">  </div>
